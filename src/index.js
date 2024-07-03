@@ -1,5 +1,5 @@
 import http from "node:http";
-import { index } from "./controller.js";
+import { index, usuariosExport } from "./controller.js";
 const server = http.createServer((request, response) => {
   const url = request.url;
   const method = request.method;
@@ -12,6 +12,7 @@ const server = http.createServer((request, response) => {
       case "/api/usuarios":
         break;
       case "/api/usuarios/export":
+        usuariosExport(request, response);
         break;
       case "/api/usuarios/import":
         break;

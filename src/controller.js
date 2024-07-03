@@ -6,7 +6,9 @@ export const index = async (request, response) => {
   try {
     const data = await fs.readFile("index.html");
 
-    response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    response.writeHead(200, {
+      "Content-Type": "text/html; charset=utf-8",
+    });
     response.write(data);
     response.end();
   } catch (error) {
@@ -15,8 +17,33 @@ export const index = async (request, response) => {
     response.end("Error interno del servidor");
   }
 };
-export const lista_usuarios = async (request, response) => {
+export const usuariosExport = async (request, response) => {
   try {
-    const usuarios = await pool.execute("SELECT * FROM usuarios");
-  } catch (error) {}
+    const [usuarios] = await pool.execute("SELECT * FROM usuarios");
+    // console.log(usuarios);
+    const rutaArchivo = path.resolve("./public/usuarios.csv");
+    const csvHeaders =
+      "id,nombre,apellidos,email,password,direccion,dni,edad,fecha_creacion,telefono\n";
+    const csvData = usuarios
+      .map(
+        (usuario) =>
+          `${usuario.id},${usuario.nombre},${usuario.apellidos},${usuario.email},${usuario.password},${usuario.direccion},${usuario.dni},${usuario.edad},${usuario.fecha_creacion},${usuario.telefono}`
+      )
+      .join("\n");
+    const csvContent = csvHeaders + csvData;
+
+    await fs.writeFile(rutaArchivo, csvContent, "utf-8");
+    response.writeHead(200, {
+      "Content-Type": "application/json; charset=utf-8",
+    });
+    response.end(
+      JSON.stringify({ message: "Usuarios exportados correctamente" })
+    );
+  } catch (error) {
+    console.log(error);
+    response.writeHead(500, {
+      "Content-Type": "application/json; charset=utf-8",
+    });
+    response.end(JSON.stringify({ menssage: "Error interno" }));
+  }
 };
