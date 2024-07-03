@@ -1,0 +1,16 @@
+{
+  "type": "module",
+  "name": "mini_proyecto_n2",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node --watch src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "mysql2": "^3.10.2"
+  }
+}
