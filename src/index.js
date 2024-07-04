@@ -1,5 +1,5 @@
 import http from "node:http";
-import { index, usuariosExport } from "./controller.js";
+import { index, usuariosExport, list } from "./controller.js";
 import { PORT } from "./config.js";
 const server = http.createServer((request, response) => {
   const url = request.url;
@@ -11,11 +11,13 @@ const server = http.createServer((request, response) => {
 
         break;
       case "/api/usuarios":
+        list(request, response);
         break;
       case "/api/usuarios/export":
         usuariosExport(request, response);
         break;
       case "/api/usuarios/import":
+        insert(request, response);
         break;
 
       default:

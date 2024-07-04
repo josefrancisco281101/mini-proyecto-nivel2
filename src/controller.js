@@ -1,6 +1,7 @@
 import path from "node:path";
 import fs from "node:fs/promises";
 import { pool } from "./bd.js";
+import { PORT } from "./config.js";
 
 export const index = async (request, response) => {
   try {
@@ -27,7 +28,7 @@ export const usuariosExport = async (request, response) => {
     const csvData = usuarios
       .map(
         (usuario) =>
-          `${usuario.id},${usuario.nombre},${usuario.apellidos},${usuario.email},${usuario.password},${usuario.direccion},${usuario.dni},${usuario.edad},${usuario.fecha_creacion},${usuario.telefono}`
+          `${usuario.usuario_id},${usuario.nombre},${usuario.apellidos},${usuario.email},${usuario.password},${usuario.direccion},${usuario.dni},${usuario.edad},${usuario.fecha_creacion},${usuario.telefono}`
       )
       .join("\n");
     const csvContent = csvHeaders + csvData;
@@ -47,3 +48,24 @@ export const usuariosExport = async (request, response) => {
     response.end(JSON.stringify({ menssage: "Error interno" }));
   }
 };
+
+export const list = async (request, response) => {
+  try {
+    const usuarios = await pool.execute("SELECT * FROM usuarios");
+    response.writeHead(200, {
+      "Content-Type": "application/json; charset=utf-8",
+    });
+    response.end(JSON.stringify(usuarios[0]));
+  } catch (error) {
+    console.log(error);
+    response.writeHead(500, {
+      "Content-Type": "application/json; charset=utf-8",
+    });
+    response.end(JSON.stringify({ menssage: "Error interno" }));
+  }
+};
+// export const insert = async (request, response) => {
+//   try {
+//     const data = await fs.readFile(rutaArchivo, "utf-8");
+//   } catch (error) {}
+// };
