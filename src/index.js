@@ -1,5 +1,6 @@
 import http from "node:http";
 import { index, usuariosExport } from "./controller.js";
+import { PORT } from "./config.js";
 const server = http.createServer((request, response) => {
   const url = request.url;
   const method = request.method;
@@ -27,4 +28,4 @@ const server = http.createServer((request, response) => {
   }
 });
 
-server.listen(3000, () => console.log("Servidor en http://localhost:3000"));
+server.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
